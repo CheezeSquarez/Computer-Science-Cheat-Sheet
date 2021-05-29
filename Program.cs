@@ -77,31 +77,24 @@ namespace Cheat_Sheet
 
         public static Node<T> DeleteItem<T>(Node<T> lst, T val)
         {
-            Node<T> retNode = lst;
-            Node<T> next = lst.GetNext();
-            if (lst.GetValue().Equals(val))
+            Node<T> dummy = new Node<T>(default, lst); // default - default value of T, for example: int = 0, object = null, bool = false
+            Node<T> temp = dummy;
+
+            while (temp.HasNext())
             {
-                lst.SetNext(null);
-                retNode = next;
-            }
-            lst = next;
-            next = lst.GetNext();
-            
-            while (next != null)
-            {
+                Node<T> next = temp.GetNext();
                 if (next.GetValue().Equals(val))
                 {
-                    lst.SetNext(next.GetNext());
+                    temp.SetNext(next.GetNext());
                     next.SetNext(null);
-                    lst = lst.GetNext();
                 }
-                lst = lst.GetNext();
-                next = lst.GetNext();
+                else
+                    temp = temp.GetNext();
             }
-            
-            return retNode;
-            
-        } //Deletes all the nodes containing val
+
+            return dummy.GetNext();
+
+        } //Deletes all the nodes containing val using dummy
 
         #endregion
 
@@ -592,10 +585,12 @@ namespace Cheat_Sheet
         static void Main(string[] args)
         {
             Node<string> lst = new Node<string>("7");
+            lst = new Node<string>("7", lst);
             lst = new Node<string>("3", lst);
             lst = new Node<string>("5", lst);
             lst = new Node<string>("2", lst);
             lst = new Node<string>("7", lst);
+
             
             Console.WriteLine(lst);
             lst = DeleteItem<string>(lst, "7");
