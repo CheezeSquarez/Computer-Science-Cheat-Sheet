@@ -5,6 +5,106 @@ namespace Cheat_Sheet
 {
     class Program
     {
+        #region Node
+        /////////////
+        ////Node////
+        ///////////
+        public static int CountNodes<T>(Node<T> lst)
+        {
+            Node<T> pos = lst;
+            int counter = 0;
+            while (pos != null)
+            {
+                counter++;
+                pos = pos.GetNext();
+            }
+            return counter;
+        } //Counts the number of nodes in the list (not including the last null)
+
+        public static int MaxNode(Node<int> lst)
+        {
+            int max = int.MinValue;
+            while(lst != null)
+            {
+                int num = lst.GetValue();
+                max = Math.Max(max, num);
+                lst = lst.GetNext();
+            }
+            return max;
+        } //Returns the largest number in the list
+
+        public static int MinNode(Node<int> lst)
+        {
+            int min = int.MaxValue;
+            while (lst != null)
+            {
+                int num = lst.GetValue();
+                min = Math.Min(min, num);
+                lst = lst.GetNext();
+            }
+            return min;
+        } //Returns the smalles number in the list
+
+        public static bool Exists<T>(Node<T> lst, T val)
+        {
+            while(lst != null)
+            {
+                T currentVal = lst.GetValue();
+                if (currentVal.Equals(val))
+                    return true;
+                lst = lst.GetNext();
+            }
+            return false;
+        } //Returns true if val exists in the list
+
+        public static void InsertedSorted(Node<int> lst, int val)
+        {
+            Node<int> next = lst.GetNext();
+            bool inserted = false;
+            while (next != null)
+            {
+                if (next == null || (val >= lst.GetValue() && val <= next.GetValue()) && !inserted)
+                {
+                    lst.SetNext(new Node<int>(val));
+                    lst = lst.GetNext();
+                    lst.SetNext(next);
+                    inserted = true;
+                }
+                lst = lst.GetNext();
+                next = lst.GetNext();
+            }
+        } //Inserts val into the a sorted list (from small to big)
+
+        public static Node<T> DeleteItem<T>(Node<T> lst, T val)
+        {
+            Node<T> retNode = lst;
+            Node<T> next = lst.GetNext();
+            if (lst.GetValue().Equals(val))
+            {
+                lst.SetNext(null);
+                retNode = next;
+            }
+            lst = next;
+            next = lst.GetNext();
+            
+            while (next != null)
+            {
+                if (next.GetValue().Equals(val))
+                {
+                    lst.SetNext(next.GetNext());
+                    next.SetNext(null);
+                    lst = lst.GetNext();
+                }
+                lst = lst.GetNext();
+                next = lst.GetNext();
+            }
+            
+            return retNode;
+            
+        } //Deletes all the nodes containing val
+
+        #endregion
+
         #region Stack
         /////////////
         ////Stack////
@@ -491,7 +591,15 @@ namespace Cheat_Sheet
         #endregion
         static void Main(string[] args)
         {
-           
+            Node<string> lst = new Node<string>("7");
+            lst = new Node<string>("3", lst);
+            lst = new Node<string>("5", lst);
+            lst = new Node<string>("2", lst);
+            lst = new Node<string>("7", lst);
+            
+            Console.WriteLine(lst);
+            lst = DeleteItem<string>(lst, "7");
+            Console.WriteLine(lst);
         }
     }
 }
