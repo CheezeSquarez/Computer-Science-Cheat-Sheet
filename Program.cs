@@ -96,146 +96,108 @@ namespace Cheat_Sheet
 
         } //Deletes all the nodes containing val using dummy
 
+        public static void Sort(Node<int> lst)
+        {
+            Node<int> pos = lst;
+            while (pos != null)
+            {
+                Node<int> temp = lst;
+                while (temp.HasNext())
+                {
+                    if (temp.GetValue() > temp.GetNext().GetValue())
+                    {
+                        int value = temp.GetValue();
+                        temp.SetValue(temp.GetNext().GetValue());
+                        temp.GetNext().SetValue(value);
+                    }
+                    temp = temp.GetNext();
+                }
+                pos = pos.GetNext();
+            }
+        } //Sorts a list from small to big
         #endregion
 
-        #region Stack
+        #region Array
         /////////////
-        ////Stack////
-        ///////////// 
-        public static Stack<T> Clone<T>(Stack<T> s)
+        ////Array////
+        /////////////
+        public static void BubbleSortAscending(int[] arr)
         {
-            Stack<T> temp = new Stack<T>();
-            Stack<T> copy = new Stack<T>();
-            while (!s.IsEmpty())
-                temp.Push(s.Pop());
-            while (!temp.IsEmpty())
+            for (int i = 1; i < arr.Length; i++)
             {
-                s.Push(temp.Top());
-                copy.Push(temp.Pop());
-            }
-            return copy;
-        } // מעתיקה את המחסנית
-
-        public static T Max<T>(Stack<T> s)
-            where T : IComparable
-        {
-            if (s.IsEmpty())
-                return default(T);
-            T max = s.Top();
-            Stack<T> temp = new Stack<T>();
-            while (!s.IsEmpty())
-            {
-                if (s.Top().CompareTo(max) > 0)
-                    max = s.Top();
-                temp.Push(s.Pop());
-            }
-            while (!temp.IsEmpty())
-                s.Push(temp.Pop());
-            return max;
-        } // מחזירה את הערך המקסימלי
-
-        public static T Min<T>(Stack<T> s)
-    where T : IComparable
-        {
-            if (s.IsEmpty())
-                return default(T);
-            T min = s.Top();
-            Stack<T> temp = new Stack<T>();
-            while (!s.IsEmpty())
-            {
-                if (s.Top().CompareTo(min) < 0)
-                    min = s.Top();
-                temp.Push(s.Pop());
-            }
-            while (!temp.IsEmpty())
-                s.Push(temp.Pop());
-            return min;
-        } // מחזירה את הערך המינימלי
-
-        public static bool Exist<T>(Stack<T> s, T val)
-        {
-            bool found = false;
-            Stack<T> temp = new Stack<T>();
-            while (!s.IsEmpty() && !found)
-            {
-                if (s.Top().Equals(val))
-                    found = true;
-                temp.Push(s.Pop());
-            }
-            while (!temp.IsEmpty())
-                s.Push(temp.Pop());
-            return found;
-        } // מחזירה אמת אם הערך נמצאה במחסנית או שקר אחרת
-
-        public static int Length<T>(Stack<T> s)
-        {
-            int length = 0;
-            Stack<T> temp = new Stack<T>();
-            while (!s.IsEmpty())
-            {
-                length++;
-                temp.Push(s.Pop());
-            }
-            while (!temp.IsEmpty())
-                s.Push(temp.Pop());
-            return length;
-        } // מחזירה את אורך המחסנית
-
-        public static void InsertSorted(Stack<int> st, int val)
-        {
-            bool found = false;
-            Stack<int> temp = new Stack<int>();
-            while (!st.IsEmpty() && !found)
-            {
-                if (val <= st.Top())
+                for (int j = 0; j < arr.Length - i; j++)
                 {
-                    st.Push(val);
-                    found = true;
+                    if (arr[j] > arr[j + 1])
+                    {
+                        int temp = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                    }
                 }
-                else
-                    temp.Push(st.Pop());
             }
-            if (st.IsEmpty())
-                st.Push(val);
-            while (!temp.IsEmpty())
-                st.Push(temp.Pop());
-        } // מכניסה את האיבר למקמותו המתאים במחסנית
+        } //Sorts an array (using Bubble Sort) in ascending order
 
-        public static Stack<T> OrderSmallToBig<T>(Stack<T> s)
-            where T : IComparable
+        public static void BubbleSortDescending(int[] arr)
         {
-            Stack<T> temp = new Stack<T>();
-            Stack<T> copy = Clone(s);
-            while (!copy.IsEmpty())
+            for (int i = 1; i < arr.Length; i++)
             {
-                temp.Push(MaxAndOut(copy));
+                for (int j = 0; j < arr.Length - i; j++)
+                {
+                    if (arr[j] < arr[j + 1])
+                    {
+                        int temp = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                    }
+                }
             }
-            return temp;
-        } // ממיינת את המחסנית מהקטן לגדול הערך הגדול ביותר נמצא בתחתית המחסנית
-        private static T MaxAndOut<T>(Stack<T> s)
-            where T : IComparable
+        } //Sorts an array (using Bubble Sort) in descending order
+
+        public static int[] MergeArrays(int[] arr1, int[] arr2)
         {
-            if (s.IsEmpty())
-                return default;
-            T max = s.Top();
-            Stack<T> temp = new Stack<T>();
-            while (!s.IsEmpty())
+            int[] newArr = new int[arr1.Length + arr2.Length];
+            for (int i = 0; i < arr1.Length; i++)
+                newArr[i] = arr1[i];
+            for (int i = arr1.Length; i < newArr.Length; i++)
+                newArr[i] = arr2[i - arr2.Length];
+            return newArr;
+        } //Merges to arrays
+
+        public static int[] MergeSortArrays(int[] arr1, int[] arr2)
+        {
+            int[] merged = MergeArrays(arr1, arr2);
+            BubbleSortAscending(merged);
+            return merged;
+        } //Merges two arrays and sorts the new array
+
+        public static void DeleteByValue(int[] arr, int val)
+        {
+            if (arr[arr.Length - 1] == val)
             {
-                if (s.Top().CompareTo(max) > 0)
-                    max = s.Top();
-                temp.Push(s.Pop());
+                arr[arr.Length - 1] = 0;
+                return;
             }
             bool found = false;
-            while (!temp.IsEmpty())
+            for (int i = 0; i < arr.Length - 1; i++)
             {
-                T val = temp.Pop();
-                if (val.Equals(max) && !found)
+                if (arr[i] == val)
                     found = true;
-                else
-                    s.Push(val);
+                if (found)
+                {
+                    arr[i] = arr[i + 1];
+                }
             }
-            return max;
-        } // הפעולה מוציאה את הערך הגדול ביותר במחסנית
+            arr[arr.Length - 1] = 0;
+        } //Deletes a value from an array (only the first appearance of that value)
+
+        public static void DeleteByIndex(int[] arr, int index)
+        {
+            for (int i = index; i < arr.Length - 1; i++)
+            {
+                arr[i] = arr[i + 1];
+            }
+        } //Deletes the value in the desired index and moves all cells back (fills in the hole)
+
         #endregion
 
         #region Queue
@@ -255,7 +217,44 @@ namespace Cheat_Sheet
                 q.Insert(temp.Remove());
             }
             return copy;
-        } // מעתיקה את התור
+        } //Clones the desired Queue
+
+        public static void MergeQueues(Queue<int> q1, Queue<int> q2) //Merges q2 into q1 (sorted)
+        {
+            while (!q2.IsEmpty())
+                InsertIntoQueueAscending(q1, q2.Remove());
+        }
+
+        public static void InsertIntoQueueAscending(Queue<int> q, int val)
+        {
+            if (q.IsEmpty())
+            {
+                q.Insert(val);
+                return;
+            }
+            Queue<int> temp = new Queue<int>();
+            while (!q.IsEmpty())
+            {
+                int v = q.Remove();
+                if (val <= v)
+                {
+                    temp.Insert(val);
+                    temp.Insert(v);
+                    break;
+                }
+                if (q.IsEmpty())
+                {
+                    temp.Insert(v);
+                    temp.Insert(val);
+                    break;
+                }
+                temp.Insert(v);
+            }
+            while (!q.IsEmpty())
+                temp.Insert(q.Remove());
+            while (!temp.IsEmpty())
+                q.Insert(temp.Remove());
+        } //Inserts val into q (in ascending order)
 
         public static T Max<T>(Queue<T> q)
             where T : IComparable
@@ -273,7 +272,7 @@ namespace Cheat_Sheet
             while (!temp.IsEmpty())
                 q.Insert(temp.Remove());
             return max;
-        } // מחזירה את הערך המקסימלי בתור
+        } // Returns the biggest value in q (only for types that inherits from IComparable)
 
         public static T Min<T>(Queue<T> q)
             where T : IComparable
@@ -291,7 +290,7 @@ namespace Cheat_Sheet
             while (!temp.IsEmpty())
                 q.Insert(temp.Remove());
             return min;
-        } // מחזירה את הערך המינימלי בתור
+        } // Returns the smallest value in q (only for types that inherits from IComparable)
 
         public static bool Exist<T>(Queue<T> q, T val)
         {
@@ -306,7 +305,7 @@ namespace Cheat_Sheet
             while (!temp.IsEmpty())
                 q.Insert(temp.Remove());
             return found;
-        } // מחזירה אמת אם הערך נמצא בתור או שקר אחרת
+        } // Returns true if val exists in q or false if not
 
         public static int Length<T>(Queue<T> q)
         {
@@ -320,7 +319,7 @@ namespace Cheat_Sheet
             while (!temp.IsEmpty())
                 q.Insert(temp.Remove());
             return length;
-        } // מחזירה את אורך התור
+        } // Returns the length q
 
         public static int GetNum(Queue<int> q)
         {
@@ -332,7 +331,7 @@ namespace Cheat_Sheet
                 counter++;
             }
             return num;
-        } //מכינה מספר באיברי התור 1-1-1 -> 111
+        } // Creates and int from q (from q --> 1 --> 2 --> 3 to 123)
 
         public static void Delete(int val, Queue<int> q)
         {
@@ -345,7 +344,7 @@ namespace Cheat_Sheet
             }
             while (!temp.IsEmpty())
                 q.Insert(temp.Remove());
-        } // מחיקת ערך מתור
+        } // Deletes val from q
 
         public static T RemoveLastItem<T>(Queue<T> q)
         {
@@ -362,7 +361,7 @@ namespace Cheat_Sheet
             while (!temp.IsEmpty())
                 q.Insert(temp.Remove());
             return last;
-        } //מוציאה את האיבר האחרון בתור ומחזירה את ההפנייה אליו
+        } //Removes the last item from q and returns it
 
         public static void InsertSorted(Queue<int> q, int val)
         {
@@ -385,7 +384,17 @@ namespace Cheat_Sheet
 
             while (!temp.IsEmpty())
                 q.Insert(temp.Remove());
-        } //מכניס ערך במקום המתאים
+        } //Inserts item in correct place 
+
+        public static void ReverseQueue<T>(Queue<T> q) // Reverses a Queue (Recursive)
+        {
+            if (!q.IsEmpty())
+            {
+                T x = q.Remove();
+                ReverseQueue(q);
+                q.Insert(x);
+            }
+        }
 
         public static Queue<T> OrderSmallToBig<T>(Queue<T> q)
             where T : IComparable
@@ -397,7 +406,7 @@ namespace Cheat_Sheet
                 temp.Insert(MinAndOut(copy));
             }
             return temp;
-        } // ממיינת את התור מהקטן לגדול הערך הגדול ביותר נמצא בתחתית התור
+        } // Sorts from small to big (ascending)
 
         private static T MinAndOut<T>(Queue<T> q)
             where T : IComparable
@@ -422,179 +431,86 @@ namespace Cheat_Sheet
                     q.Insert(val);
             }
             return min;
-        } // הפעולה מוציאה את הערך הגדול ביותר בתור
+        } // finds the smallest value in q and removes it (returns the value)
 
-        #endregion
-
-        #region BinNode
-        ///////////////
-        ////BinNode////
-        ///////////////
-
-        public static BinNode<string> CreateTree()
+        public static void RemoveDouble<T>(Queue<T> q)
         {
-            Console.WriteLine("Please enter root value:");
-            string shoresh = Console.ReadLine();
-            if (shoresh == "")
-                return null;
-            BinNode<string> root = new BinNode<string>(shoresh);
-            Console.WriteLine($"Please enter left sub tree of {shoresh}:");
-            BinNode<string> left = CreateTree();
-            Console.WriteLine($"Please enter right sub tree of {shoresh}:");
-            BinNode<string> right = CreateTree();
-            root.SetLeft(left);
-            root.SetRight(right);
-            return root;
-        } //מכינה עץ ע"י הכנסת נתונים מהמשתמש
-
-        public static BinNode<int> CreateRandomTree(int height, Random r, int min, int max)
-        {
-            if (height < 0)
-                return null;
-            int shoresh = r.Next(min, max + 1);
-            BinNode<int> root = new BinNode<int>(shoresh);
-            BinNode<int> left = CreateRandomTree(height - 1, r, min, max);
-            BinNode<int> right = CreateRandomTree(height - 1, r, min, max);
-            root.SetLeft(left);
-            root.SetRight(right);
-            return root;
-        } //יוצר עץ עם מספרים אקראיים
-
-        public static void PrintInorder(BinNode<int> t)
-        {
-            //תנאי עצירה
-            if (t == null)
-                return;
-            //הדפס תת עץ שמאלי
-            PrintInorder(t.GetLeft());
-            //טיפול בשורש
-            Console.WriteLine(t.GetValue());
-            //הדפס תת עץ ימני
-            PrintInorder(t.GetRight());
-        } //מדפיס באופן תוכי
-
-        public static void PrintPreOrder(BinNode<int> t)
-        {
-            //תנאי עצירה
-            if (t == null)
-                return;
-            //טיפול בשורש
-            Console.WriteLine(t.GetValue());
-            //הדפס תת עץ שמאלי
-            PrintPreOrder(t.GetLeft());
-            //הדפס תת עץ ימני
-            PrintPreOrder(t.GetRight());
-        } //מדפיס באופן סופי
-
-        public static void PrintPostOrder(BinNode<int> t)
-        {
-            //תנאי עצירה
-            if (t == null)
-                return;
-            //הדפס תת עץ שמאלי
-            PrintPostOrder(t.GetLeft());
-            //הדפס תת עץ ימני
-            PrintPostOrder(t.GetRight());
-            //טיפול בשורש
-            Console.WriteLine(t.GetValue());
-
-        } //מדפיס באופן תחילי
-
-        public static int CountNodes<T>(BinNode<T> t)
-        {
-            //תנאי עצירה
-            if (t == null)
-                return 0;
-
-            //טיפול
-            int numNodes = 1;
-
-            //ספירת הצמתים בתת עץ השמאלי
-            numNodes += CountNodes<T>(t.GetLeft());
-
-            //ספירת הצמתים בתת עץ הימני
-            numNodes += CountNodes<T>(t.GetRight());
-
-            return numNodes;
-        } //מחזיר את מספר הצמתים בעץ
-
-        public static bool Search<T>(BinNode<T> t, T val)
-        {
-            if (t == null)
-                return false;
-
-            return (t.GetValue().Equals(val) ||
-                Search<T>(t.GetLeft(), val) ||
-                Search<T>(t.GetRight(), val));
-        } //בודק אם ערך מסויים נמצא בעץ
-
-        public static int Height<T>(BinNode<T> t)
-        {
-            //עץ ריק בגובה 0
-            //וגם עץ בעל צומת אחד
-            if (t == null)
-                return 0;
-
-            if (!t.HasLeft() && !t.HasRight())
-                return 0;
-            int left = Height<T>(t.GetLeft());
-            int right = Height<T>(t.GetRight());
-            return 1 + Math.Max(left, right);
-        } //מחזיר את גובה העץ
-
-        public static int CountNodesPerLevel<T>(BinNode<T> t, int level, int currentLevel)
-        {
-            if (t == null)
-                return 0;
-            if (level == currentLevel)
+            Queue<T> temp = new Queue<T>();
+            while (!q.IsEmpty())
             {
-                return 1;
+                RemoveDouble(q, q.Head());
+                temp.Insert(q.Remove());
             }
-            return CountNodesPerLevel<T>(t.GetLeft(), level, currentLevel + 1) +
-                CountNodesPerLevel<T>(t.GetRight(), level, currentLevel + 1);
-        } 
-        public static int CountNodesPerLevel<T>(BinNode<T> t, int level)
+            while (!temp.IsEmpty())
+                q.Insert(temp.Remove());
+        } //Removes all the duplicates in the q
+
+        public static void RemoveDouble<T>(Queue<T> q, T val)
         {
-            return CountNodesPerLevel<T>(t, level, 0);
-        } // סופר את מספר הצמתים ברמה מסויימת
+            bool found = false;
+            Queue<T> temp = new Queue<T>();
+            while (!q.IsEmpty())
+            {
+                T v = q.Remove();
+                if (!found || (found && !v.Equals(val)))
+                {
+                    temp.Insert(v);
+                }
+                if (v.Equals(val))
+                    found = true;
+            }
+            while (!temp.IsEmpty())
+                q.Insert(temp.Remove());
+        } //Removes all duplicates from q (gets called by the method before)
 
-        public static bool IsFull<T>(BinNode<T> t)
+        public static int Sum(Queue<int> q) // Returns the sum of the Queue
         {
-            //עץ ריק הוא עץ מלא
-            if (t == null)
-                return true;
+            Queue<int> temp = new Queue<int>();
+            int sum = 0;
+            while (!q.IsEmpty())
+            {
+                sum += q.Head();
+                temp.Insert(q.Remove());
+            }
+            while (!temp.IsEmpty())
+                q.Insert(temp.Remove());
+            return sum;
+        }
 
-            //בדיקה האם לא מלא
-            if (t.HasLeft() && !t.HasRight() ||
-                !t.HasLeft() && t.HasRight())
-                return false;
-
-            return IsFull<T>(t.GetLeft()) && IsFull<T>(t.GetRight());
-        } //בודק עם העץ הוא עץ מלא
-
-        public static int CountLeafs<T>(BinNode<T> t)
+        public static Queue<int> QueueByCommon(Queue<int> q)
         {
-            if (!t.HasLeft() && !t.HasRight())
-                return 1;
-
-            return CountLeafs(t.GetLeft()) + CountLeafs(t.GetRight());
-        } //סופר את מספר העלים בעץ
-
+            Queue<int> common = new Queue<int>();
+            Queue<int> copied = Clone<int>(q);
+            while (!copied.IsEmpty())
+            {
+                int val = copied.Remove();
+                common.Insert(val);
+                common.Insert(CountAndRemove(copied, val) + 1);
+            }
+            return common;
+        }
+        public static int CountAndRemove(Queue<int> q, int num)
+        {
+            Queue<int> temp = new Queue<int>();
+            int counter = 0;
+            while (!q.IsEmpty())
+            {
+                int val = q.Remove();
+                if (val == num)
+                    counter++;
+                else
+                    temp.Insert(val);
+            }
+            while (!temp.IsEmpty())
+                q.Insert(temp.Remove());
+            return counter;
+        }
 
         #endregion
+
+        
         static void Main(string[] args)
         {
-            Node<string> lst = new Node<string>("7");
-            lst = new Node<string>("7", lst);
-            lst = new Node<string>("3", lst);
-            lst = new Node<string>("5", lst);
-            lst = new Node<string>("2", lst);
-            lst = new Node<string>("7", lst);
-
-            
-            Console.WriteLine(lst);
-            lst = DeleteItem<string>(lst, "7");
-            Console.WriteLine(lst);
         }
     }
 }
