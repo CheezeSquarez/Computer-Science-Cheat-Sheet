@@ -488,7 +488,8 @@ namespace Cheat_Sheet
                 common.Insert(CountAndRemove(copied, val) + 1);
             }
             return common;
-        }
+        } //Sorts the q according to how much the numbers appear (most appearances to least)
+
         public static int CountAndRemove(Queue<int> q, int num)
         {
             Queue<int> temp = new Queue<int>();
@@ -504,8 +505,26 @@ namespace Cheat_Sheet
             while (!temp.IsEmpty())
                 q.Insert(temp.Remove());
             return counter;
-        }
+        } //Counts how many appearances and removes that specific number
 
+        public static Queue<int> NegativeAndPositiveSort(Queue<int> q)
+        {
+            Queue<int> negatives = new Queue<int>();
+            Queue<int> positives = new Queue<int>();
+            while (!q.IsEmpty())
+            {
+                int val = q.Remove();
+                if (val < 0)
+                    negatives.Insert(val);
+                else
+                    positives.Insert(val);
+            }
+            while (!negatives.IsEmpty())
+                q.Insert(negatives.Remove());
+            while (!positives.IsEmpty())
+                q.Insert(positives.Remove());
+            return q;
+        } //Sorts a q => negatives first then positives
         #endregion
 
         
