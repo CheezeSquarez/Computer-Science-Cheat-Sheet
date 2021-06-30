@@ -77,6 +77,36 @@ namespace Cheat_Sheet
             return dummy.GetNext();
         } //Inserts val into the a sorted list (from small to big)
 
+        public static Node<int> DeleteByIndex(Node<int> lst, int index)
+        {
+            Node<int> pos = lst;
+            Node<int> prev = null;
+            int counter = 0;
+
+            while (pos != null && counter != index)
+            {
+                prev = pos;
+                pos = pos.GetNext();
+                counter++;
+            }
+            if (counter == index)
+            {
+                if (pos == lst)
+                {
+                    Node<int> current = lst;
+                    lst = lst.GetNext();
+                    current.SetNext(null);
+                }
+                else
+                {
+                    Node<int> current = pos;
+                    prev.SetNext(pos.GetNext());
+                    current.SetNext(null);
+                }
+            }
+            return lst;
+        }
+
         public static Node<int> DeleteItem(Node<int> lst, int val)
         {
             Node<int> pos = lst, prev = null;
