@@ -57,42 +57,42 @@ namespace Cheat_Sheet
             return false;
         } //Returns true if val exists in the list
 
-        public static void InsertedSorted(Node<int> lst, int val)
+        public static Node<int> InsertedSorted(Node<int> lst, int val)
         {
-            Node<int> next = lst.GetNext();
-            bool inserted = false;
-            while (next != null)
-            {
-                if (next == null || (val >= lst.GetValue() && val <= next.GetValue()) && !inserted)
-                {
-                    lst.SetNext(new Node<int>(val));
-                    lst = lst.GetNext();
-                    lst.SetNext(next);
-                    inserted = true;
-                }
-                lst = lst.GetNext();
-                next = lst.GetNext();
-            }
-        } //Inserts val into the a sorted list (from small to big)
-
-        public static Node<T> DeleteItem<T>(Node<T> lst, T val)
-        {
-            Node<T> dummy = new Node<T>(default, lst); // default - default value of T, for example: int = 0, object = null, bool = false
-            Node<T> temp = dummy;
-
+            Node<int> dummy = new Node<int>(-1, lst);
+            Node<int> temp = dummy;
+            bool found = false;
             while (temp.HasNext())
             {
-                Node<T> next = temp.GetNext();
-                if (next.GetValue().Equals(val))
+                Node<int> next = temp.GetNext();
+                if (!found && next.GetValue() < val)
                 {
-                    temp.SetNext(next.GetNext());
-                    next.SetNext(null);
+                    temp.SetNext(new Node<int> (val, next));
+                    found = true;
                 }
-                else
-                    temp = temp.GetNext();
+                temp = temp.GetNext();
             }
-
+            if (!found)
+                temp.SetNext(new Node<int> (val));
             return dummy.GetNext();
+        } //Inserts val into the a sorted list (from small to big)
+
+        public static Node<int> DeleteItem(Node<int> lst, int val)
+        {
+            Node<int> pos = lst, prev = null;
+            while (pos != null && pos.GetValue() != val)
+            {
+                prev = pos;
+                pos = pos.GetNext();
+            }
+            if (pos.GetValue() == val)
+            {
+                if (pos == lst)
+                    lst = lst.GetNext();
+                else
+                    prev.SetNext(pos.GetNext());
+            }
+            return lst;
 
         } //Deletes all the nodes containing val using dummy
 
@@ -196,6 +196,7 @@ namespace Cheat_Sheet
             {
                 arr[i] = arr[i + 1];
             }
+            arr[arr.Length - 1] = 0; // 0 represents the default value of the array
         } //Deletes the value in the desired index and moves all cells back (fills in the hole)
 
         #endregion
